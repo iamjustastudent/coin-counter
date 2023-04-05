@@ -1,29 +1,69 @@
-const int pinIr2p = 7;
-const int pinIr50p = 9;
-const int pinIr10p = 2;
-const int pinIr100p = 4;
-const int pinIr20p = 5;
-const int pinIr1p = 6;
-const int pinIr5p = 8;
-const int pinIr200p = 12;
+/*INPUT*/
+//紅外線感應腳位設置D4,D7,D8,D10
+const int pinNTD1 = 4;
+const int pinNTD5 = 7;
+const int pinNTD10 = 8;
+const int pinNTD50 = 10;
+
+//按鈕腳位D14,D15,D16,D17
+const int pinbuttonNTD1 = 14;
+const int pinbuttonNTD5 = 15;
+const int pinbuttonNTD10 = 16;
+const int pinbuttonNTD50 = 17;
+
+//開關腳位D11
+const int pinswitch = 11;
+
+/*OUTPUT*/
+//馬達腳位D3,D5,D6,D9
+const int pinmotorNTD1 = 3;
+const int pinmotorNTD5 = 5;
+const int pinmotorNTD10 = 6;
+const int pinmotorNTD50 = 9;
 
 
-int IRvalue2p = 0;
-int IRvalue50p = 0;
-int IRvalue10p = 0;
-int IRvalue100p = 0;
-int IRvalue20p = 0;
-int IRvalue1p = 0;
-int IRvalue5p = 0;
-int IRvalue200p = 0;
+//LCD I2C1602腳位設置 A4,A5
+const int pinLCD3 = 4;
+const int pinLCD4 = 5;
 
-const int pinIrStart = 6;
-int pinMotor = 3;
-int IRvalueStart = 0;
+/*變數設置*/
+//紅外線變數
+int statesensorNTD1 = 0;
+int statesensorNTD5 = 0;
+int statesensorNTD10 = 0;
+int statesensorNTD50 = 0;
 
-int coinCount = 0;
+//按鈕變數
+int statebuttonNTD1 = 0;
+int statebuttonNTD5 = 0;
+int statebuttonNTD10 = 0;
+int statebuttonNTD50 = 0;
+
+//開關變數
+int stateswitch = 0;
+
+//各硬幣總價值
+int valueNTD1 = 0;
+int valueNTD5 = 0;
+int valueNTD10 = 0;
+int valueNTD50 = 0;
+
+//各硬幣總數
+int quantityNTD1 = 0;
+int quantityNTD5 = 0;
+int quantityNTD10 = 0;
+int quantityNTD50 = 0;
+
+//錢總量
 int MoneyWorth = 0;
-String MessageToPrint = "p";
+
+//const int pinIrStart = 6;
+//int pinMotor = 3;
+//int IRvalueStart = 0;
+
+//int coinCount = 0;
+
+//String MessageToPrint = "p";
 
 
 /* Display */
@@ -40,10 +80,23 @@ String message = "BEEF";
 void setup()
 {
   Serial.begin(9600);
-  pinMode(pinIr2p,INPUT);
-  pinMode(pinIrStart,INPUT);
-  pinMode(pinMotor,OUTPUT);
-
+  pinMode(pinNTD1,INPUT);
+  pinMode(pinNTD5,INPUT);
+  pinMode(pinNTD10,INPUT);
+  pinMode(pinNTD50,INPUT);
+  
+  pinMode(pinbuttonNTD1,INPUT);
+  pinMode(pinbuttonNTD5,INPUT);
+  pinMode(pinbuttonNTD10,INPUT);
+  pinMode(pinbuttonNTD50,INPUT);
+  
+  pinMode(pinswitch,INPUT);
+  
+  
+  pinMode(pinmotorNTD1,OUTPUT);
+  pinMode(pinmotorNTD5,OUTPUT);
+  pinMode(pinmotorNTD10,OUTPUT);
+  pinMode(pinmotorNTD50,OUTPUT);
 
   
   //Welcome message
@@ -54,30 +107,24 @@ void setup()
 
 void loop()
 {
-  IRvalue2p = digitalRead(pinIr2p);
-  IRvalue50p = digitalRead(pinIr50p);
-  IRvalue10p = digitalRead(pinIr10p);
-  IRvalue100p = digitalRead(pinIr100p);
-  IRvalue20p = digitalRead(pinIr20p);
-  IRvalue1p = digitalRead(pinIr1p);
-  IRvalue5p = digitalRead(pinIr5p);
-  IRvalue200p = digitalRead(pinIr200p);
-  IRvalueStart = digitalRead(pinIrStart);
+  statesensorNTD1 = digitalRead(pinNTD1);
+  statesensorNTD5 = digitalRead(pinNTD5);
+  statesensorNTD10 = digitalRead(pinNTD10);
+  statesensorNTD50 = digitalRead(pinNTD50);
   
-
-
- //  if (IRvalueStart == 0) {
- //   Serial.println("Coin detected. Starting motor...");
- //   digitalWrite(pinMotor, HIGH);
- //   delay(200);
- //  }
+  /*unfinished line*/
+   if (IRvalueStart == 0) {
+    Serial.println("Coin detected. Starting motor...");
+    digitalWrite(pinMotor, HIGH);
+    delay(200);
+   }
    
    if (IRvalue2p == 0) {
     Serial.println("It was a 2p coin that was detected");
     coinDetected();
     MoneyWorth = MoneyWorth + 1;
-    //displayAmountSerial();
-    //isplayAmount();
+    displayAmountSerial();
+    displayAmount();
     delay(200);
    }
 
@@ -85,8 +132,8 @@ void loop()
     Serial.println("It was a 50p coin that was detected");
     coinDetected();
     MoneyWorth = MoneyWorth + 50;
-    //displayAmountSerial();
-    //displayAmount();
+    displayAmountSerial();
+    displayAmount();
     delay(200);
    }
 
@@ -94,8 +141,8 @@ void loop()
     Serial.println("It was a 10p coin that was detected");
     coinDetected();
     MoneyWorth = MoneyWorth + 10;
-    //displayAmountSerial();
-    //displayAmount();
+    displayAmountSerial();
+    displayAmount();
     delay(200);
    }
 
@@ -103,8 +150,8 @@ void loop()
     Serial.println("It was a £1 coin that was detected");
     coinDetected();
     MoneyWorth = MoneyWorth + 100;
-    //displayAmountSerial();
-    //displayAmount();
+    displayAmountSerial();
+    displayAmount();
     delay(200);
    }
 
@@ -112,8 +159,8 @@ void loop()
     Serial.println("It was a 20p coin that was detected");
     coinDetected();
     MoneyWorth = MoneyWorth + 20;
-    //displayAmountSerial();
-    //displayAmount();
+    displayAmountSerial();
+    displayAmount();
     delay(200);
    }
 
@@ -121,8 +168,8 @@ void loop()
     Serial.println("It was a 1p coin that was detected");
     coinDetected();
     MoneyWorth = MoneyWorth + 1;
-    //displayAmountSerial();
-    //displayAmount();
+    displayAmountSerial();
+    displayAmount();
     delay(200);
    }
 
@@ -130,8 +177,8 @@ void loop()
     Serial.println("It was a 5p coin that was detected");
     coinDetected();
     MoneyWorth = MoneyWorth + 5;
-    //displayAmountSerial();
-    //displayAmount();
+    displayAmountSerial();
+    displayAmount();
     delay(200);
    }
    
@@ -139,14 +186,14 @@ void loop()
     Serial.println("It was a £2 coin that was detected");
     coinDetected();
     MoneyWorth = MoneyWorth + 200;
-    //displayAmountSerial();
-    //displayAmount();
+    displayAmountSerial();
+    displayAmount();
     delay(200);
    }
 
 }
 
-//void displayAmount() {
+void displayAmount() {
   /* Clear the output buffer of the screen */
     lcd.Clear();
     /* Write some text and output it*/
@@ -182,7 +229,7 @@ void loop()
     lcd.Refresh();
 }
 
-//void displayAmountSerial(){
+void displayAmountSerial(){
   Serial.print("So that's ");
     Serial.print(coinCount);
     Serial.print(" coins now and the total value counted is ");
