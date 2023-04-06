@@ -85,12 +85,12 @@ void setup()
   pinMode(pinNTD10,INPUT);
   pinMode(pinNTD50,INPUT);
   
-  pinMode(pinbuttonNTD1,INPUT);
-  pinMode(pinbuttonNTD5,INPUT);
-  pinMode(pinbuttonNTD10,INPUT);
-  pinMode(pinbuttonNTD50,INPUT);
+  pinMode(pinbuttonNTD1,INPUT_PULLUP);
+  pinMode(pinbuttonNTD5,INPUT_PULLUP);
+  pinMode(pinbuttonNTD10,INPUT_PULLUP);
+  pinMode(pinbuttonNTD50,INPUT_PULLUP);
   
-  pinMode(pinswitch,INPUT);
+  pinMode(pinswitch,INPUT_PULLUP);
   
   
   pinMode(pinmotorNTD1,OUTPUT);
