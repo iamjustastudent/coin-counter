@@ -113,14 +113,9 @@ void loop()
   statesensorNTD50 = digitalRead(pinNTD50);
   
   /*unfinished line*/
-   if (IRvalueStart == 0) {
-    Serial.println("Coin detected. Starting motor...");
-    digitalWrite(pinMotor, HIGH);
-    delay(200);
-   }
    
-   if (IRvalue2p == 0) {
-    Serial.println("It was a 2p coin that was detected");
+   if (statesensorNTD1 == 0) {
+    Serial.println("It was a NTD1 coin that was detected");
     coinDetected();
     MoneyWorth = MoneyWorth + 1;
     displayAmountSerial();
@@ -128,17 +123,17 @@ void loop()
     delay(200);
    }
 
-   if (IRvalue50p == 0) {
-    Serial.println("It was a 50p coin that was detected");
+   if (statesensorNTD5 == 0) {
+    Serial.println("It was a NTD5 coin that was detected");
     coinDetected();
-    MoneyWorth = MoneyWorth + 50;
+    MoneyWorth = MoneyWorth + 5;
     displayAmountSerial();
     displayAmount();
     delay(200);
    }
 
-   if (IRvalue10p == 0) {
-    Serial.println("It was a 10p coin that was detected");
+   if (statesensorNTD10 == 0) {
+    Serial.println("It was a NTD10 coin that was detected");
     coinDetected();
     MoneyWorth = MoneyWorth + 10;
     displayAmountSerial();
@@ -146,46 +141,10 @@ void loop()
     delay(200);
    }
 
-   if (IRvalue100p == 0) {
-    Serial.println("It was a £1 coin that was detected");
+   if (statesensorNTD50 == 0) {
+    Serial.println("It was a NTD50 coin that was detected");
     coinDetected();
-    MoneyWorth = MoneyWorth + 100;
-    displayAmountSerial();
-    displayAmount();
-    delay(200);
-   }
-
-   if (IRvalue20p == 0) {
-    Serial.println("It was a 20p coin that was detected");
-    coinDetected();
-    MoneyWorth = MoneyWorth + 20;
-    displayAmountSerial();
-    displayAmount();
-    delay(200);
-   }
-
-   if (IRvalue1p == 0) {
-    Serial.println("It was a 1p coin that was detected");
-    coinDetected();
-    MoneyWorth = MoneyWorth + 1;
-    displayAmountSerial();
-    displayAmount();
-    delay(200);
-   }
-
-   if (IRvalue5p == 0) {
-    Serial.println("It was a 5p coin that was detected");
-    coinDetected();
-    MoneyWorth = MoneyWorth + 5;
-    displayAmountSerial();
-    displayAmount();
-    delay(200);
-   }
-   
-   if (IRvalue200p == 0) {
-    Serial.println("It was a £2 coin that was detected");
-    coinDetected();
-    MoneyWorth = MoneyWorth + 200;
+    MoneyWorth = MoneyWorth + 50;
     displayAmountSerial();
     displayAmount();
     delay(200);
@@ -197,36 +156,10 @@ void displayAmount() {
   /* Clear the output buffer of the screen */
     lcd.Clear();
     /* Write some text and output it*/
-    if (MoneyWorth > 9999){
-      lcd.Clear();
-      lcd.setCursor(0,0);
-      lcd.print(MoneyWorth,6);
-    }
-    else if (MoneyWorth > 999){
-      lcd.Clear();
-      lcd.setCursor(0,0);
-      lcd.print(MoneyWorth,5);
-    }
-    else if (MoneyWorth > 99){
-      lcd.Clear();
-      lcd.setCursor(0,0);      
-      lcd.print(MoneyWorth,4);
-    }
-    else if (MoneyWorth > 9){
-      lcd.Clear();
-      lcd.setCursor(0,0);
-      lcd.print(MoneyWorth,3);
-    }
-    else{
-      lcd.Clear();
-      lcd.setCursor(0,0);
-      lcd.print(MoneyWorth,2); 
-    }
-    
+        
     lcd.Clear();
     lcd.setCursor(0,0);
-    lcd.print("p",1); //always add the 'p' sign
-    lcd.Refresh();
+    lcd.print("TOTAL MONEY",MoneyWorth); //
 }
 
 void displayAmountSerial(){
