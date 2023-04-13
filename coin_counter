@@ -5,11 +5,13 @@ const int pinNTD5 = 7;
 const int pinNTD10 = 8;
 const int pinNTD50 = 10;
 
-//按鈕腳位D14,D15,D16,D17
+//按鈕腳位D14,D15,D16,D17,D12
 const int pinbuttonNTD1 = 14;
 const int pinbuttonNTD5 = 15;
 const int pinbuttonNTD10 = 16;
 const int pinbuttonNTD50 = 17;
+
+const int pinbuttondisplaychange = 12;
 
 //開關腳位D11
 const int pinswitch = 11;
@@ -73,6 +75,8 @@ int MoneyWorth = 0;
 #define LOAD 10
 /* Create somewhere to store the message*/
 String message = "BEEF";
+// LCD I2C位址，默認為0x27或0x3F，依據背板的晶片不同而有差異，16、2為LCD顯示器大小。
+LiquidCrystal_I2C lcd(0x27, 16, 2); 
 
 
 
@@ -89,6 +93,7 @@ void setup()
   pinMode(pinbuttonNTD5,INPUT_PULLUP);
   pinMode(pinbuttonNTD10,INPUT_PULLUP);
   pinMode(pinbuttonNTD50,INPUT_PULLUP);
+  pinMode(pinbuttondisplaychange,INPUT_PULLUP);
   
   pinMode(pinswitch,INPUT_PULLUP);
   
@@ -111,13 +116,13 @@ void loop()
   statesensorNTD5 = digitalRead(pinNTD5);
   statesensorNTD10 = digitalRead(pinNTD10);
   statesensorNTD50 = digitalRead(pinNTD50);
-  
-  /*unfinished line*/
    
    if (statesensorNTD1 == 0) {
     Serial.println("It was a NTD1 coin that was detected");
-    coinDetected();
+    valueNTD1 += 1;
+    quantityNTD1 += 1;
     MoneyWorth = MoneyWorth + 1;
+
     displayAmountSerial();
     displayAmount();
     delay(200);
@@ -125,7 +130,8 @@ void loop()
 
    if (statesensorNTD5 == 0) {
     Serial.println("It was a NTD5 coin that was detected");
-    coinDetected();
+    valueNTD5 += 5;
+    quantityNTD5 += 1;
     MoneyWorth = MoneyWorth + 5;
     displayAmountSerial();
     displayAmount();
@@ -134,7 +140,8 @@ void loop()
 
    if (statesensorNTD10 == 0) {
     Serial.println("It was a NTD10 coin that was detected");
-    coinDetected();
+    valueNTD10 += 10;
+    quantityNTD10 += 1;
     MoneyWorth = MoneyWorth + 10;
     displayAmountSerial();
     displayAmount();
@@ -143,13 +150,28 @@ void loop()
 
    if (statesensorNTD50 == 0) {
     Serial.println("It was a NTD50 coin that was detected");
-    coinDetected();
+    valueNTD50 += 50;
+    quantityNTD50 += 1;
     MoneyWorth = MoneyWorth + 50;
     displayAmountSerial();
     displayAmount();
     delay(200);
    }
-
+  if (pinbuttondisplaychange = 0){
+    //顯示各硬幣數量
+    lcd.clear();
+    lcd.setCursor(1,0);
+    lcd.print("1   5   10  50");
+    lcd.setCursor(1,1);
+    lcd.print(quantityNTD1);
+    lcd.setCursor(5,1);
+    lcd.print(quantityNTD5);
+    lcd.setCursor(9,1);
+    lcd.print(quantityNTD10);
+    lcd.setCursor(13,1);
+    lcd.print(quantityNTD50);
+  }
+  
 }
 
 void displayAmount() {
@@ -158,20 +180,22 @@ void displayAmount() {
     /* Write some text and output it*/
         
     lcd.Clear();
-    lcd.setCursor(0,0);
-    lcd.print("TOTAL MONEY",MoneyWorth); //
+    lcd.setCursor(3,0);
+    lcd.print("TOTAL MONEY"); //
+    lcd.setCursor(5,1);
+    lcd.print(MoneyWorth);
 }
 
 void displayAmountSerial(){
-  Serial.print("So that's ");
-    Serial.print(coinCount);
-    Serial.print(" coins now and the total value counted is ");
-    Serial.print(MoneyWorth);
-    Serial.println("p");
-    Serial.println();
+  Serial.print("1:");
+  Serial.print(quantityNTD1);
+  Serial.print(",5:");
+  Serial.print(quantityNTD5);
+  Serial.print(",10:");
+  Serial.print(quantityNTD10);
+  Serial.print(",50:");
+  Serial.print(quantityNTD50);
+  Serial.print(",moneyworth:");
+  Serial.println(MoneyWorth);
 }
 
-void coinDetected() {
-    coinCount ++;
-    digitalWrite(pinMotor, LOW);
-}
