@@ -12,3 +12,4 @@ https://www.lazytomatolab.com/as-09/
        （回家）修改程式碼
 4/6    測試元件+修改程式碼
 4/13   修改程式碼(剩下output部分)(+段落性測試)
+4/20   編寫按鈕輸出部分code
