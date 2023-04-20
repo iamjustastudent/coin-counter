@@ -184,10 +184,10 @@ void loop()
 
 void displayAmount() {
   /* Clear the output buffer of the screen */
-    lcd.Clear();
+    lcd.clear();
     /* Write some text and output it*/
         
-    lcd.Clear();
+    lcd.clear();
     lcd.setCursor(3,0);
     lcd.print("TOTAL MONEY"); //
     lcd.setCursor(5,1);
@@ -206,4 +206,3 @@ void displayAmountSerial(){     //ex:1:2,5:3,10:14,50:4,moneyworth:357
   Serial.print(",moneyworth:");
   Serial.println(MoneyWorth);
 }
-
