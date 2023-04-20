@@ -40,6 +40,7 @@ int statebuttonNTD1 = 0;
 int statebuttonNTD5 = 0;
 int statebuttonNTD10 = 0;
 int statebuttonNTD50 = 0;
+int statebuttondisplaychange = 0;
 
 //開關變數
 int stateswitch = 0;
@@ -105,8 +106,8 @@ void setup()
 
   
   //Welcome message
-  byte Loopcounter;
-  byte Position;
+  //byte Loopcounter;
+  //byte Position;
 
 }
 
@@ -116,6 +117,13 @@ void loop()
   statesensorNTD5 = digitalRead(pinNTD5);
   statesensorNTD10 = digitalRead(pinNTD10);
   statesensorNTD50 = digitalRead(pinNTD50);
+  
+  //button偵測
+  statebuttondisplaychange = digitalRead(pinbuttondisplaychange);
+  statebuttonNTD1 = digitalRead(pinbuttonNTD1);
+  statebuttonNTD5 = digitalRead(pinbuttonNTD5);
+  statebuttonNTD10 = digitalRead(pinbuttonNTD10);
+  statebuttonNTD50 = digitalRead(pinbuttonNTD50);
    
    if (statesensorNTD1 == 0) {
     Serial.println("It was a NTD1 coin that was detected");
@@ -157,7 +165,7 @@ void loop()
     displayAmount();
     delay(200);
    }
-  if (pinbuttondisplaychange = 0){
+  if (statebuttondisplaychange = 0){
     //LCD顯示各硬幣數量
     lcd.clear();
     lcd.setCursor(1,0);
