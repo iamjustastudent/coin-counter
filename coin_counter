@@ -158,7 +158,7 @@ void loop()
     delay(200);
    }
   if (pinbuttondisplaychange = 0){
-    //顯示各硬幣數量
+    //LCD顯示各硬幣數量
     lcd.clear();
     lcd.setCursor(1,0);
     lcd.print("1   5   10  50");
@@ -186,7 +186,7 @@ void displayAmount() {
     lcd.print(MoneyWorth);
 }
 
-void displayAmountSerial(){
+void displayAmountSerial(){     //ex:1:2,5:3,10:14,50:4,moneyworth:357
   Serial.print("1:");
   Serial.print(quantityNTD1);
   Serial.print(",5:");
