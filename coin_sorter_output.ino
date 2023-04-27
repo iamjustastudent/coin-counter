@@ -76,18 +76,6 @@ int MoneyWorth = 0;
 
 
 
-/* Display */
-/* Include the HCMAX7219 and SPI library */
-#include <LiquidCrystal_I2C.h> 
-/* Set the LOAD (CS) digital pin number*/
-#define LOAD 10
-/* Create somewhere to store the message*/
-String message = "BEEF";
-// LCD I2C位址，默認為0x27或0x3F，依據背板的晶片不同而有差異，16、2為LCD顯示器大小。
-LiquidCrystal_I2C lcd(0x27, 16, 2); 
-
-
-
 
 void setup()
 {
@@ -106,65 +94,106 @@ void setup()
   pinMode(pinswitch,INPUT_PULLUP);
   
   
-  pinMode(pinmotorNTD1,OUTPUT);
-  pinMode(pinmotorNTD5,OUTPUT);
-  pinMode(pinmotorNTD10,OUTPUT);
-  pinMode(pinmotorNTD50,OUTPUT);
+  servoNTD1.attach(pinmotorNTD1);
+  servoNTD5.attach(pinmotorNTD5);
+  servoNTD10.attach(pinmotorNTD10);
+  servoNTD50.attach(pinmotorNTD50);
 
-  
 
 }
-/*下面才是重點*/
+
 void loop()
 {
+  statesensorNTD1 = digitalRead(pinNTD1);
+  statesensorNTD5 = digitalRead(pinNTD5);
+  statesensorNTD10 = digitalRead(pinNTD10);
+  statesensorNTD50 = digitalRead(pinNTD50);
+  
   //button偵測
   statebuttondisplaychange = digitalRead(pinbuttondisplaychange);
   statebuttonNTD1 = digitalRead(pinbuttonNTD1);
   statebuttonNTD5 = digitalRead(pinbuttonNTD5);
   statebuttonNTD10 = digitalRead(pinbuttonNTD10);
   statebuttonNTD50 = digitalRead(pinbuttonNTD50);
-  
+   
+   if (statesensorNTD1 == 0) {
+    Serial.println("It was a NTD1 coin that was detected");
+    valueNTD1 += 1;
+    quantityNTD1 += 1;
+    MoneyWorth = MoneyWorth + 1;
 
-  //1
-  if(statebuttonNTD1 != HIGH && buttonUpNTD1 == true) {
-    servoNTD1.write(180);
-    delay(1000);
-    servoNTD1.write(0);
-    buttonUpNTD1 = false;
-  }
-  else if(statebuttonNTD1 == HIGH && buttonUpNTD1 != true) {
-    buttonUpNTD1 = true;
-  }
-  //5
-  if(statebuttonNTD5 != HIGH && buttonUpNTD5 == true) {
-    servoNTD5.write(180);
-    delay(1000);
-    servoNTD5.write(0);
-    buttonUpNTD5 = false;
-  }
-  else if(statebuttonNTD5 == HIGH && buttonUpNTD5 != true) {
-    buttonUpNTD5 = true;
-  }
-  //10
-  if(statebuttonNTD10 != HIGH && buttonUpNTD10 == true) {
-    servoNTD10.write(180);
-    delay(1000);
-    servoNTD10.write(0);
-    buttonUpNTD10 = false;
-  }
-  else if(statebuttonNTD10 == HIGH && buttonUpNTD10 != true) {
-    buttonUpNTD10 = true;
-  }
-  //50
-  if(statebuttonNTD50 != HIGH && buttonUpNTD50 == true) {
-    servoNTD50.write(180);
-    delay(1000);
-    servoNTD50.write(0);
-    buttonUpNTD50 = false;
-  }
-  else if(statebuttonNTD50 == HIGH && buttonUpNTD50 != true) {
-    buttonUpNTD50 = true;
+    displayAmountSerial();
+    displayAmount();
+    delay(200);
+   }
+
+   if (statesensorNTD5 == 0) {
+    Serial.println("It was a NTD5 coin that was detected");
+    valueNTD5 += 5;
+    quantityNTD5 += 1;
+    MoneyWorth = MoneyWorth + 5;
+    displayAmountSerial();
+    displayAmount();
+    delay(200);
+   }
+
+   if (statesensorNTD10 == 0) {
+    Serial.println("It was a NTD10 coin that was detected");
+    valueNTD10 += 10;
+    quantityNTD10 += 1;
+    MoneyWorth = MoneyWorth + 10;
+    displayAmountSerial();
+    displayAmount();
+    delay(200);
+   }
+
+   if (statesensorNTD50 == 0) {
+    Serial.println("It was a NTD50 coin that was detected");
+    valueNTD50 += 50;
+    quantityNTD50 += 1;
+    MoneyWorth = MoneyWorth + 50;
+    displayAmountSerial();
+    displayAmount();
+    delay(200);
+   }
+  if (statebuttondisplaychange = 0){
+    //LCD顯示各硬幣數量
+    lcd.clear();
+    lcd.setCursor(1,0);
+    lcd.print("1   5   10  50");
+    lcd.setCursor(1,1);
+    lcd.print(quantityNTD1);
+    lcd.setCursor(5,1);
+    lcd.print(quantityNTD5);
+    lcd.setCursor(9,1);
+    lcd.print(quantityNTD10);
+    lcd.setCursor(13,1);
+    lcd.print(quantityNTD50);
   }
   
 }
 
+void displayAmount() {
+  /* Clear the output buffer of the screen */
+    lcd.clear();
+    /* Write some text and output it*/
+        
+    lcd.clear();
+    lcd.setCursor(3,0);
+    lcd.print("TOTAL MONEY"); //
+    lcd.setCursor(5,1);
+    lcd.print(MoneyWorth);
+}
+
+void displayAmountSerial(){     //ex:1:2,5:3,10:14,50:4,moneyworth:357
+  Serial.print("1:");
+  Serial.print(quantityNTD1);
+  Serial.print(",5:");
+  Serial.print(quantityNTD5);
+  Serial.print(",10:");
+  Serial.print(quantityNTD10);
+  Serial.print(",50:");
+  Serial.print(quantityNTD50);
+  Serial.print(",moneyworth:");
+  Serial.println(MoneyWorth);
+}
