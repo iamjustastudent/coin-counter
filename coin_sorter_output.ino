@@ -1,3 +1,9 @@
+#include <Servo.h>
+
+#include <LiquidCrystal_I2C.h> 
+/* Set the LOAD (CS) digital pin number*/
+//#define LOAD 10
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 /*INPUT*/
 //紅外線感應腳位設置D4,D7,D8,D10
 const int pinNTD1 = 4;
@@ -22,7 +28,8 @@ const int pinmotorNTD1 = 3;
 const int pinmotorNTD5 = 5;
 const int pinmotorNTD10 = 6;
 const int pinmotorNTD50 = 9;
-
+//伺服馬達SERVO物件
+Servo servoNTD1,servoNTD5,servoNTD10,servoNTD50;
 
 //LCD I2C1602腳位設置 A4,A5
 const int pinLCD3 = 4;
@@ -42,7 +49,7 @@ int statebuttonNTD10 = 0;
 int statebuttonNTD50 = 0;
 int statebuttondisplaychange = 0;
 
-//按鈕是否放開
+//按鈕是否放開(可能放setup?
 boolean buttonUpNTD1 = true;
 boolean buttonUpNTD5 = true;
 boolean buttonUpNTD10 = true;
@@ -107,7 +114,7 @@ void setup()
   
 
 }
-
+/*下面才是重點*/
 void loop()
 {
   //button偵測
@@ -118,54 +125,46 @@ void loop()
   statebuttonNTD50 = digitalRead(pinbuttonNTD50);
   
 
-
+  //1
   if(statebuttonNTD1 != HIGH && buttonUpNTD1 == true) {
     servoNTD1.write(180);
     delay(1000);
     servoNTD1.write(0);
-    digitalWrite(13, state);
     buttonUpNTD1 = false;
   }
   else if(statebuttonNTD1 == HIGH && buttonUpNTD1 != true) {
     buttonUpNTD1 = true;
   }
-  delay(10);
   //5
-  if(statebuttonNTD1 != HIGH && buttonUpNTD1 == true) {
-    servoNTD1.write(180);
+  if(statebuttonNTD5 != HIGH && buttonUpNTD5 == true) {
+    servoNTD5.write(180);
     delay(1000);
-    servoNTD1.write(0);
-    digitalWrite(13, state);
-    buttonUpNTD1 = false;
+    servoNTD5.write(0);
+    buttonUpNTD5 = false;
   }
-  else if(statebuttonNTD1 == HIGH && buttonUpNTD1 != true) {
-    buttonUpNTD1 = true;
+  else if(statebuttonNTD5 == HIGH && buttonUpNTD5 != true) {
+    buttonUpNTD5 = true;
   }
-  delay(10);
   //10
-  if(statebuttonNTD1 != HIGH && buttonUpNTD1 == true) {
-    servoNTD1.write(180);
+  if(statebuttonNTD10 != HIGH && buttonUpNTD10 == true) {
+    servoNTD10.write(180);
     delay(1000);
-    servoNTD1.write(0);
-    digitalWrite(13, state);
-    buttonUpNTD1 = false;
+    servoNTD10.write(0);
+    buttonUpNTD10 = false;
   }
-  else if(statebuttonNTD1 == HIGH && buttonUpNTD1 != true) {
-    buttonUpNTD1 = true;
+  else if(statebuttonNTD10 == HIGH && buttonUpNTD10 != true) {
+    buttonUpNTD10 = true;
   }
-  delay(10);
   //50
-  if(statebuttonNTD1 != HIGH && buttonUpNTD1 == true) {
-    servoNTD1.write(180);
+  if(statebuttonNTD50 != HIGH && buttonUpNTD50 == true) {
+    servoNTD50.write(180);
     delay(1000);
-    servoNTD1.write(0);
-    digitalWrite(13, state);
-    buttonUpNTD1 = false;
+    servoNTD50.write(0);
+    buttonUpNTD50 = false;
   }
-  else if(statebuttonNTD1 == HIGH && buttonUpNTD1 != true) {
-    buttonUpNTD1 = true;
+  else if(statebuttonNTD50 == HIGH && buttonUpNTD50 != true) {
+    buttonUpNTD50 = true;
   }
-  delay(10);
   
 }
 
