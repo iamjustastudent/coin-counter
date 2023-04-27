@@ -31,7 +31,6 @@ const int pinmotorNTD50 = 9;
 //伺服馬達SERVO物件
 Servo servoNTD1,servoNTD5,servoNTD10,servoNTD50;
 
-
 //LCD I2C1602腳位設置 A4,A5
 const int pinLCD3 = 4;
 const int pinLCD4 = 5;
@@ -49,6 +48,12 @@ int statebuttonNTD5 = 0;
 int statebuttonNTD10 = 0;
 int statebuttonNTD50 = 0;
 int statebuttondisplaychange = 0;
+
+//按鈕是否放開(可能放setup?
+boolean buttonUpNTD1 = true;
+boolean buttonUpNTD5 = true;
+boolean buttonUpNTD10 = true;
+boolean buttonUpNTD50 = true;
 
 //開關變數
 int stateswitch = 0;
@@ -68,20 +73,6 @@ int quantityNTD50 = 0;
 //錢總量
 int MoneyWorth = 0;
 
-//const int pinIrStart = 6;
-//int pinMotor = 3;
-//int IRvalueStart = 0;
-
-//int coinCount = 0;
-
-//String MessageToPrint = "p";
-
-
-
-#include <LiquidCrystal_I2C.h> 
-/* Set the LOAD (CS) digital pin number*/
-//#define LOAD 10
-LiquidCrystal_I2C lcd(0x27, 16, 2); 
 
 
 
@@ -108,10 +99,6 @@ void setup()
   servoNTD10.attach(pinmotorNTD10);
   servoNTD50.attach(pinmotorNTD50);
 
-  
-  //Welcome message
-  //byte Loopcounter;
-  //byte Position;
 
 }
 
